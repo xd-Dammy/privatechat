@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PrivateChat – Private Messaging Without a Phone Number</title>
+  <meta name="description" content="PrivateChat is a private messenger that never asks for your phone number. Nobody can message you until you accept their request. Free voice and video calls, groups, and app lock.">
+  <link rel="canonical" href="https://private-chatbox-kohl.vercel.app/">
+  <meta name="theme-color" content="#0d1424">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="PrivateChat">
+  <meta property="og:title" content="PrivateChat – Private Messaging Without a Phone Number">
+  <meta property="og:description" content="Nobody can message you until you say yes. No phone number required.">
+  <meta property="og:url" content="https://private-chatbox-kohl.vercel.app/">
+  <meta property="og:image" content="https://private-chatbox-kohl.vercel.app/icon-512.png">
+  <meta name="twitter:card" content="summary">
+
+  <link rel="icon" type="image/png" sizes="32x32" href="icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icon-16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="icon-180.png">
+  <link rel="manifest" href="manifest.json">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "PrivateChat",
+    "url": "https://private-chatbox-kohl.vercel.app/",
+    "description": "A private messenger that doesn't require a phone number. Messages from new people arrive as requests you accept or decline.",
+    "applicationCategory": "CommunicationApplication",
+    "operatingSystem": "Any (web browser)",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+  }
+  </script>
+
+  <script>
+    // Installed app (home-screen icon) goes straight to the chat app.
+    if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true) {
+      location.replace('app.html' + location.search);
+    }
+  </script>
+
+  <style>
+    :root {
+      --navy: #001f3f;
+      --navy-2: #0d1424;
+      --line: #1d4272;
+      --text: #e9f0f8;
+      --mist: #9db3cc;
+      --amber: #f5b942;
+      --amber-ink: #3a2600;
+      --ok: #7fd6a4;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--navy);
+      color: var(--text);
+      font: 17px/1.6 "Avenir Next", "Segoe UI", system-ui, -apple-system, Roboto, sans-serif;
+    }
+    a { color: var(--amber); }
+    :focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; border-radius: 6px; }
+    .wrap { max-width: 1040px; margin: 0 auto; padding: 0 22px; }
+
+    /* Top bar */
+    header { padding: 18px 0; border-bottom: 1px solid var(--line); }
+    header .wrap { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; color: var(--text); text-decoration: none; }
+    .brand img { width: 32px; height: 32px; border-radius: 8px; }
+    .btn {
+      display: inline-block; padding: 12px 20px; border-radius: 12px; font-weight: 700;
+      text-decoration: none; background: var(--amber); color: var(--amber-ink); border: 0; cursor: pointer; font-size: 1rem;
+    }
+    .btn:hover { filter: brightness(1.08); }
+    .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--line); }
+    .btn.ghost:hover { border-color: var(--mist); filter: none; }
+    header .btn { padding: 9px 16px; }
+
+    /* Hero */
+    .hero { display: grid; gap: 40px; padding: 56px 0 64px; align-items: center; }
+    h1 {
+      font-size: clamp(2.5rem, 8vw, 4.4rem);
+      line-height: 1.02; letter-spacing: -0.035em; font-weight: 800; margin: 0 0 18px;
+    }
+    .lede { font-size: 1.15rem; color: var(--mist); max-width: 34em; margin: 0 0 28px; }
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    /* The request card: the one memorable thing on the page */
+    .phone {
+      background: var(--navy-2); border: 1px solid var(--line); border-radius: 22px;
+      padding: 20px; max-width: 400px; width: 100%; justify-self: center;
+    }
+    .phone .tag { font-size: .85rem; color: var(--mist); margin: 0 0 14px; }
+    .request { background: var(--navy); border: 1px solid var(--line); border-radius: 16px; padding: 16px; }
+    .who { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .avatar { width: 44px; height: 44px; border-radius: 14px; background: #123a68; display: grid; place-items: center; font-size: 1.4rem; }
+    .who b { display: block; }
+    .who span { font-size: .85rem; color: var(--mist); }
+    .intro { margin: 0 0 16px; padding: 12px 14px; background: #0b3262; border-radius: 12px 12px 12px 4px; }
+    .choices { display: flex; gap: 10px; }
+    .choices button {
+      flex: 1; padding: 11px; border-radius: 10px; font: inherit; font-weight: 700; cursor: pointer; border: 1px solid var(--line);
+      background: transparent; color: var(--text);
+    }
+    .choices button.yes { background: var(--amber); color: var(--amber-ink); border-color: var(--amber); }
+    .result { margin: 0; color: var(--mist); }
+    .result strong { color: var(--ok); }
+    .result.declined strong { color: var(--text); }
+    .reset { background: none; border: 0; color: var(--amber); font: inherit; padding: 0; margin-top: 10px; cursor: pointer; text-decoration: underline; }
+    [hidden] { display: none !important; }
+
+    /* Sections */
+    section { padding: 56px 0; border-top: 1px solid var(--line); }
+    h2 { font-size: clamp(1.6rem, 4.5vw, 2.2rem); line-height: 1.12; letter-spacing: -0.02em; margin: 0 0 28px; max-width: 18em; }
+    .steps { list-style: none; counter-reset: step; margin: 0; padding: 0; display: grid; gap: 28px; }
+    .steps li { counter-increment: step; padding-left: 52px; position: relative; max-width: 30em; }
+    .steps li::before {
+      content: counter(step); position: absolute; left: 0; top: 0; width: 36px; height: 36px; border-radius: 50%;
+      border: 1px solid var(--amber); color: var(--amber); display: grid; place-items: center; font-weight: 700;
+    }
+    .steps h3 { margin: 0 0 4px; font-size: 1.1rem; }
+    .steps p { margin: 0; color: var(--mist); }
+
+    .features { display: grid; gap: 26px 40px; margin: 0; padding: 0; list-style: none; }
+    .features h3 { margin: 0 0 4px; font-size: 1.05rem; }
+    .features p { margin: 0; color: var(--mist); }
+
+    .final p { color: var(--mist); max-width: 30em; margin: 0 0 24px; }
+
+    footer { border-top: 1px solid var(--line); padding: 26px 0 40px; color: var(--mist); font-size: .95rem; }
+    footer .wrap { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; }
+
+    @media (min-width: 820px) {
+      .hero { grid-template-columns: 1.15fr 0.85fr; padding: 80px 0 88px; }
+      .features { grid-template-columns: 1fr 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <a class="brand" href="./"><img src="icon-192.png" alt="" width="32" height="32">PrivateChat</a>
+      <a class="btn" href="app.html">Open app</a>
+    </div>
+  </header>
+
+  <main>
+    <div class="wrap">
+      <div class="hero">
+        <div>
+          <h1>Nobody can message you until you say yes.</h1>
+          <p class="lede">PrivateChat is a messenger that never asks for your phone number. People find you by an in-app number and send one intro message. You decide whether the conversation opens.</p>
+          <div class="cta-row">
+            <a class="btn" href="app.html">Open PrivateChat</a>
+            <a class="btn ghost" href="privacy.html">Read the privacy policy</a>
+          </div>
+        </div>
+
+        <div class="phone" role="group" aria-label="Example of a message request">
+          <p class="tag">Example request</p>
+          <div class="request" id="request">
+            <div id="pending">
+              <div class="who">
+                <div class="avatar" aria-hidden="true">🌿</div>
+                <div><b>Amara</b><span>wants to chat</span></div>
+              </div>
+              <p class="intro">Hi, we met at the design meetup. Can we chat?</p>
+              <div class="choices">
+                <button type="button" id="decline">Decline</button>
+                <button type="button" id="accept" class="yes">Accept</button>
+              </div>
+            </div>
+            <div id="outcome" hidden aria-live="polite">
+              <p class="result" id="outcome-text"></p>
+              <button type="button" class="reset" id="reset">Try again</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section>
+      <div class="wrap">
+        <h2>How you start a conversation</h2>
+        <ol class="steps">
+          <li>
+            <h3>Share your in-app number</h3>
+            <p>When you sign up, you get a number that works only inside PrivateChat. Your real phone number is never requested.</p>
+          </li>
+          <li>
+            <h3>Someone sends one intro message</h3>
+            <p>A new person can send a single message with their request. They can't send more until you respond.</p>
+          </li>
+          <li>
+            <h3>You accept or decline</h3>
+            <p>Accept and the full conversation opens. Decline and it stays closed.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section>
+      <div class="wrap">
+        <h2>What's in the app</h2>
+        <ul class="features">
+          <li><h3>Voice and video calls</h3><p>Call your contacts directly from the chat.</p></li>
+          <li><h3>Group chats</h3><p>Create a group, add members, and choose who manages it.</p></li>
+          <li><h3>Status updates</h3><p>Post a photo that your contacts can see for 24 hours, and hide it from anyone you pick.</p></li>
+          <li><h3>View-once media</h3><p>Send photos, videos, and voice notes that can be opened only once.</p></li>
+          <li><h3>App lock</h3><p>Require a PIN, or Face ID or fingerprint, every time the app opens.</p></li>
+          <li><h3>You control what others see</h3><p>Turn read receipts and online status on or off in Settings.</p></li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="final">
+      <div class="wrap">
+        <h2>Start chatting on your terms</h2>
+        <p>Sign up with email, Google, or Apple. It works in your browser, and you can add it to your home screen.</p>
+        <a class="btn" href="app.html">Open PrivateChat</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© 2026 PrivateChat</span>
+      <a href="privacy.html">Privacy policy</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var pending = document.getElementById('pending');
+      var outcome = document.getElementById('outcome');
+      var text = document.getElementById('outcome-text');
+
+      function show(kind) {
+        pending.hidden = true;
+        outcome.hidden = false;
+        text.className = 'result' + (kind === 'no' ? ' declined' : '');
+        text.innerHTML = kind === 'yes'
+          ? '<strong>Accepted.</strong> The conversation with Amara is now open.'
+          : '<strong>Declined.</strong> Amara can\u2019t send you more messages.';
+        document.getElementById('reset').focus();
+      }
+      document.getElementById('accept').addEventListener('click', function () { show('yes'); });
+      document.getElementById('decline').addEventListener('click', function () { show('no'); });
+      document.getElementById('reset').addEventListener('click', function () {
+        outcome.hidden = true;
+        pending.hidden = false;
+        document.getElementById('accept').focus();
+      });
+    })();
+  </script>
+</body>
+</html>
