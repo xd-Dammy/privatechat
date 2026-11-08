@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/__/auth/:path*", "destination": "https://privatechat-83c05.firebaseapp.com/__/auth/:path*" },
-    { "source": "/__/firebase/init.json", "destination": "https://privatechat-83c05.firebaseapp.com/__/firebase/init.json" }
-  ]
-}
