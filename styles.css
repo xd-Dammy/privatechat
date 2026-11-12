@@ -1,0 +1,319 @@
+.chat-container {
+      scrollbar-width: thin;
+      scrollbar-color: #4b5563 transparent;
+    }
+    .chat-container::-webkit-scrollbar { width: 4px; }
+    .chat-container::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 20px; }
+
+    .message-bubble { max-width: 85%; word-break: break-word; }
+
+    html, body { height: 100%; }
+    @supports (height: 100dvh) {
+      #login-page, #main-app, #loading-screen { min-height: 100dvh; }
+      body { height: 100dvh; }
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+        width: 100%;
+        max-width: 100%;
+      }
+      .sidebar.open { transform: translateX(0); }
+      .message-bubble { max-width: 88%; }
+      #chat-name, #chat-status { max-width: 55vw; }
+
+      /* Telegram-style full-screen chat: while a chat is open, the chat
+         area sits fixed above everything (including the bottom nav, which
+         lives inside .sidebar) and fills the entire viewport. It only
+         shows once a chat/group is actually opened (see .chat-area-active
+         toggled from JS), so "no chat selected" doesn't show a blank
+         full-screen panel behind the chat list on first load. */
+      .chat-area-mobile {
+        position: fixed;
+        inset: 0;
+        z-index: 40;
+        transform: translateX(100%);
+        transition: transform 0.25s ease;
+        background: #030712;
+      }
+      .chat-area-mobile.chat-area-active { transform: translateX(0); }
+
+      /* chat.html loads directly into a specific conversation, so it should
+         never show the chat-list sidebar first while data is still loading —
+         start the chat area on-screen immediately, before app.js finishes
+         resolving which contact/group the URL points to. */
+      .is-chat-page .chat-area-mobile { transform: translateX(0); }
+    }
+
+    .spinner {
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      width: 20px; height: 20px;
+      animation: spin 0.7s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .social-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; padding: 14px; border-radius: 16px; font-weight: 600;
+      font-size: 15px; transition: transform 0.1s ease;
+    }
+    .social-btn:active { transform: scale(0.97); }
+    .divider {
+      display: flex; align-items: center; gap: 12px; color: #6b7280;
+      font-size: 12px; margin: 20px 0;
+    }
+    .divider::before, .divider::after {
+      content: ""; flex: 1; height: 1px; background: #374151;
+    }
+
+    /* ---- Auth screen: navy/teal brand theme, matches app icon ---- */
+    .auth-bg {
+      background:
+        radial-gradient(circle at 15% 15%, rgba(4,249,206,0.10), transparent 45%),
+        radial-gradient(circle at 85% 85%, rgba(1,159,230,0.12), transparent 50%),
+        linear-gradient(160deg, #001f3f 0%, #002955 55%, #001428 100%);
+    }
+    .auth-card {
+      background: rgba(0, 31, 63, 0.65);
+      border: 1px solid rgba(4, 249, 206, 0.18);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .auth-card-pulse { animation: authPulse 0.35s ease; }
+    @keyframes authPulse {
+      0% { transform: scale(0.985); opacity: 0.7; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .auth-toggle-wrap { background: rgba(0, 20, 40, 0.6); }
+    .auth-toggle-active {
+      background: linear-gradient(135deg, #019FE6, #04F9CE);
+      color: #001f3f;
+      transition: all 0.25s ease;
+    }
+    .auth-toggle-inactive {
+      color: rgba(176, 249, 242, 0.55);
+      background: transparent;
+      transition: all 0.25s ease;
+    }
+
+    .auth-input {
+      background: rgba(0, 20, 40, 0.55);
+      border: 1px solid rgba(4, 249, 206, 0.15);
+      color: #fff;
+    }
+    .auth-input:focus { border-color: #04F9CE; }
+    .auth-input::placeholder { color: rgba(176, 249, 242, 0.35); }
+
+    .auth-submit-btn {
+      background: linear-gradient(135deg, #019FE6, #00C3BF, #04F9CE);
+      color: #001f3f;
+    }
+    .auth-submit-btn:hover { filter: brightness(1.08); }
+
+    /* ==========================================================
+       THEME SYSTEM
+       Default (no attribute, or data-theme="dark") = existing dark UI.
+       data-theme="light" overrides the Tailwind gray/dark classes
+       used throughout the main app, without touching every element.
+       ========================================================== */
+    html[data-theme="light"] body { background: #f3f4f6 !important; color: #111827 !important; }
+
+    html[data-theme="light"] .bg-gray-950 { background-color: #f3f4f6 !important; }
+    html[data-theme="light"] .bg-gray-900:not(#apple-btn) { background-color: #ffffff !important; }
+    html[data-theme="light"] #apple-btn.hover\:bg-gray-900:hover { background-color: #1f2937 !important; }
+    html[data-theme="light"] .bg-gray-800 { background-color: #e5e7eb !important; }
+    html[data-theme="light"] .bg-gray-800\/50 { background-color: rgba(229,231,235,0.6) !important; }
+    html[data-theme="light"] .bg-gray-700 { background-color: #d1d5db !important; }
+    html[data-theme="light"] .hover\:bg-gray-800:hover { background-color: #e5e7eb !important; }
+    html[data-theme="light"] .hover\:bg-gray-600:hover { background-color: #d1d5db !important; }
+    html[data-theme="light"] .hover\:bg-gray-700:hover { background-color: #d1d5db !important; }
+
+    html[data-theme="light"] .border-gray-700 { border-color: #e5e7eb !important; }
+    html[data-theme="light"] .border-gray-600 { border-color: #d1d5db !important; }
+
+    html[data-theme="light"] .text-white:not(#apple-btn):not(#apple-btn *) { color: #111827 !important; }
+    html[data-theme="light"] .text-gray-400 { color: #6b7280 !important; }
+    html[data-theme="light"] .text-gray-500 { color: #9ca3af !important; }
+    html[data-theme="light"] .text-gray-600 { color: #9ca3af !important; }
+
+    html[data-theme="light"] #messages { background: #f9fafb !important; }
+    html[data-theme="light"] .message-bubble.bg-gray-800 {
+      background-color: #ffffff !important;
+      color: #111827 !important;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+    }
+
+    html[data-theme="light"] .text-gray-100,
+    html[data-theme="light"] .text-gray-200 { color: #111827 !important; }
+    html[data-theme="light"] .text-gray-300 { color: #374151 !important; }
+
+    .theme-btn { color: #9ca3af; }
+    .theme-btn.theme-btn-active {
+      background: #2563eb !important;
+      color: #ffffff !important;
+    }
+
+    /* Local camera preview mirrored like a selfie camera, remote video not mirrored */
+    #local-video { transform: scaleX(-1); object-fit: cover; }
+
+    /* ==========================================================
+       NEON CALL UI
+       ========================================================== */
+    .call-neon-bg {
+      background:
+        radial-gradient(circle at 20% 20%, rgba(0, 255, 240, 0.12), transparent 45%),
+        radial-gradient(circle at 80% 80%, rgba(255, 0, 200, 0.12), transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(120, 0, 255, 0.08), transparent 60%),
+        #060010;
+    }
+
+    .call-neon-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: 9999px;
+      border: 2px solid rgba(0, 255, 240, 0.6);
+      box-shadow:
+        0 0 12px rgba(0, 255, 240, 0.7),
+        0 0 30px rgba(0, 255, 240, 0.4),
+        inset 0 0 12px rgba(0, 255, 240, 0.3);
+      animation: neonPulse 2s ease-in-out infinite;
+    }
+    @keyframes neonPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.08); opacity: 0.7; }
+    }
+
+    .call-neon-avatar {
+      box-shadow: 0 0 20px rgba(255, 0, 200, 0.35), inset 0 0 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .call-neon-text {
+      text-shadow: 0 0 8px rgba(0, 255, 240, 0.6), 0 0 20px rgba(0, 255, 240, 0.3);
+    }
+
+    .call-neon-border {
+      border: 2px solid rgba(0, 255, 240, 0.7);
+      box-shadow: 0 0 14px rgba(0, 255, 240, 0.5);
+    }
+
+    .call-neon-btn {
+      background: rgba(10, 6, 20, 0.7);
+      backdrop-filter: blur(6px);
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+    .call-neon-btn:active { transform: scale(0.92); }
+
+    .call-neon-btn-cyan {
+      border: 1.5px solid rgba(0, 255, 240, 0.7);
+      box-shadow: 0 0 10px rgba(0, 255, 240, 0.45);
+      color: #7dfdf3;
+    }
+    .call-neon-btn-cyan:hover { box-shadow: 0 0 18px rgba(0, 255, 240, 0.7); }
+
+    .call-neon-btn-green {
+      border: 1.5px solid rgba(60, 255, 130, 0.8);
+      box-shadow: 0 0 14px rgba(60, 255, 130, 0.55);
+      color: #b6ffcf;
+    }
+    .call-neon-btn-green:hover { box-shadow: 0 0 22px rgba(60, 255, 130, 0.8); }
+
+    .call-neon-btn-red {
+      border: 1.5px solid rgba(255, 60, 90, 0.85);
+      box-shadow: 0 0 14px rgba(255, 60, 90, 0.6);
+      color: #ffc2cc;
+    }
+    .call-neon-btn-red:hover { box-shadow: 0 0 22px rgba(255, 60, 90, 0.85); }
+
+    /* ==========================================================
+       APP LOCK PIN PAD
+       ========================================================== */
+    .pin-key {
+      width: 72px; height: 72px;
+      border-radius: 9999px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+      font-size: 1.5rem;
+      font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.15s ease, transform 0.1s ease;
+    }
+    .pin-key:active { background: rgba(255, 255, 255, 0.18); transform: scale(0.95); }
+
+    .pin-dot-filled { background: #04F9CE !important; border-color: #04F9CE !important; }
+    .pin-dot-error { background: #ef4444 !important; border-color: #ef4444 !important; }
+
+    /* ==========================================================
+       STATUS / STORIES
+       ========================================================== */
+    @keyframes statusProgress {
+      from { width: 0%; }
+      to { width: 100%; }
+    }
+
+
+
+/* ==========================================================
+   SINGLE-PAGE CHAT ROUTE
+   Landing view uses the full screen for the chat list/navigation.
+   Opening a chat switches the same index.html into a full-screen
+   conversation view without loading another HTML document.
+   ========================================================== */
+html.chat-route body,
+body.is-chat-page {
+  overflow: hidden;
+}
+
+body:not(.is-chat-page) #chat-area {
+  display: none !important;
+}
+
+body:not(.is-chat-page) #sidebar {
+  width: 100% !important;
+  max-width: none !important;
+  border-right: 0 !important;
+}
+
+body.is-chat-page #sidebar {
+  display: none !important;
+}
+
+body.is-chat-page #chat-area {
+  display: flex !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 60 !important;
+  transform: translateX(0) !important;
+}
+
+@media (min-width: 769px) {
+  body:not(.is-chat-page) #main-app {
+    display: flex;
+    flex-direction: column !important;
+  }
+
+  body:not(.is-chat-page) #sidebar {
+    flex: 1 1 auto !important;
+    height: 100% !important;
+  }
+}
+
+/* Group call tiles */
+.gc-tile { position: relative; overflow: hidden; border-radius: 1rem; background: #0b1020; border: 1px solid rgba(4,249,206,.35); min-height: 0; }
+.gc-tile video { width: 100%; height: 100%; object-fit: cover; }
+.gc-tile .gc-avatar { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 3rem; color: #fff; }
+.gc-tile .gc-name { position: absolute; left: .5rem; bottom: .4rem; font-size: .75rem; color: #fff; text-shadow: 0 1px 3px #000; max-width: 90%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.gc-tile .gc-state { position: absolute; right: .5rem; top: .4rem; font-size: .65rem; color: #5eead4; }
+
+/* Status viewer: hide the top bars/name while the finger is held down */
+#status-viewer-modal.held .status-chrome { opacity: 0; transition: opacity .15s; }
+#status-viewer-modal .status-chrome { transition: opacity .15s; }
+#status-viewer-modal #status-reply-bar { display: none; }
+#status-viewer-modal #status-reply-bar:not(.hidden) { display: flex; }
+#status-viewer-modal #status-paused-icon:not(.hidden) { display: flex; }
