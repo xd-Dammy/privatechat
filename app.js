@@ -2900,7 +2900,7 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/12.16.0/fireba
     // ---- Payment (Paystack) ----
     // PAYSTACK_PUBLIC_KEY: Paystack dashboard -> Settings -> API Keys -> Public key (starts pk_live_ or pk_test_).
     // It is safe to put here (it cannot take money out). NEVER put the secret key (sk_...) in this file.
-    const PAYSTACK_PUBLIC_KEY = "";
+    const PAYSTACK_PUBLIC_KEY = "pk_live_2ba5cbefa3342a85256b0492a64f4d5ad554bbce";
     const FEED_PRICE_NGN = 500;
     const FEED_DAYS = 30;
     const FEED_PAYMENT_URL = ""; // optional fallback: a Paystack payment-page link, used if no public key is set
